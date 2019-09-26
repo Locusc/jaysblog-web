@@ -1,21 +1,28 @@
 import React from 'react';
-import { Card, Typography, Alert } from 'antd';
+import { Card, Typography, Alert, Button } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { FormattedMessage } from 'umi-plugin-react/locale';
+import { messages } from '@/utils/GlobalTools';
 
-const CodePreview: React.FC<{}> = ({ children }) => (
-  <pre
-    style={{
-      background: '#f2f4f5',
-      padding: '12px 20px',
-      margin: '12px 0',
-    }}
-  >
-    <code>
-      <Typography.Text copyable>{children}</Typography.Text>
-    </code>
-  </pre>
-);
+const CodePreview: React.FC<{}> = ({ children }) => {
+  const mockMessage = () => messages('error', '测试在TypeScript中ANTD组件的输出', 4, 'thunderbolt');
+  return (
+    <pre
+      style={{
+        background: '#f2f4f5',
+        padding: '12px 20px',
+        margin: '12px 0',
+      }}
+    >
+      <code>
+        <Typography.Text copyable>{children}</Typography.Text>
+        <Button type="danger" onClick={mockMessage}>
+          Danger
+        </Button>
+      </code>
+    </pre>
+  );
+};
 
 export default (): React.ReactNode => (
   <PageHeaderWrapper>
