@@ -4,6 +4,7 @@
  */
 import { extend } from 'umi-request';
 import { notification } from 'antd';
+import router from 'umi/router';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -32,15 +33,34 @@ const errorHandler = (error: { response: Response }): Response => {
     const errorText = codeMessage[response.status] || response.statusText;
     const { status, url } = response;
 
+    if (status === 401) {
+      notification.error({
+        message: '未登录或登录已过期，请重新登录。',
+      });
+    }
     notification.error({
       message: `请求错误 ${status}: ${url}`,
       description: errorText,
     });
-  } else if (!response) {
-    notification.error({
-      description: '您的网络发生异常，无法连接服务器',
-      message: '网络异常',
-    });
+    // environment should not be used
+    if (status === 403) {
+      router.push('/exception/403');
+    }
+    if (status <= 504 && status >= 500) {
+      router.push('/exception/500');
+    }
+    if (status >= 404 && status < 422) {
+      router.push('/exception/404');
+    }
+    //   notification.error({
+    //     message: `请求错误 ${status}: ${url}`,
+    //     description: errorText,
+    //   });
+    // } else if (!response) {
+    //   notification.error({
+    //     description: '您的网络发生异常，无法连接服务器',
+    //     message: '网络异常',
+    //   });
   }
   return response;
 };
