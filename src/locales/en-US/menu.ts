@@ -49,4 +49,8 @@ export default {
   'menu.editor.koni': 'Koni Editor',
   // blog locale
   'menu.blogindex': 'Home Page',
+  'menu.journeyIndex': 'Personal Journey',
+  'menu.messageBoardIndex': 'Message Board',
+  'menu.projectPracticeIndex': 'Project Practice',
+  'menu.summaryIndex': 'Personal Summary',
 };

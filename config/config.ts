@@ -102,11 +102,11 @@ export default {
         {
           path: '/',
           component: '../layouts/BasicLayout',
-          authority: ['admin', 'user'],
+          authority: ['admin', 'user', 'guest'],
           routes: [
             {
               path: '/',
-              redirect: '/blogindex',
+              redirect: '/journeyIndex',
             },
             {
               name: 'welcome',
@@ -115,10 +115,34 @@ export default {
               component: './Welcome',
             },
             {
-              name: 'blogindex',
-              path: '/blogindex',
-              icon: 'file-text',
+              name: 'blogIndex',
+              path: '/blogIndex',
+              icon: 'customer-service',
               component: './BlogIndex',
+            },
+            {
+              name: 'projectPracticeIndex',
+              path: '/projectPracticeIndex',
+              icon: 'highlight',
+              component: './ProjectPracticeIndex',
+            },
+            {
+              name: 'journeyIndex',
+              path: '/journeyIndex',
+              icon: 'crown',
+              component: './JourneyIndex',
+            },
+            {
+              name: 'messageBoardIndex',
+              path: '/messageBoardIndex',
+              icon: 'message',
+              component: './MessageBoardIndex',
+            },
+            {
+              name: 'summaryIndex',
+              path: '/summaryIndex',
+              icon: 'audio',
+              component: './SummaryIndex',
             },
             {
               component: './404',
@@ -192,13 +216,13 @@ export default {
       },
     },
   */
-  // proxy: {
-  //   '/jay': {
-  //     target: 'http://127.0.0.1:5000/',
-  //     changeOrigin: true,
-  //     pathRewrite: {
-  //       '^/jay': '',
-  //     },
-  //   },
-  // },
+  proxy: {
+    '/server/api/': {
+      target: 'http://127.0.0.1:5000/',
+      changeOrigin: true,
+      pathRewrite: {
+        '^/server': '',
+      },
+    },
+  },
 } as IConfig;
