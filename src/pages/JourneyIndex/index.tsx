@@ -1,19 +1,21 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Timeline, Icon, Card, Comment, Avatar, Tooltip } from 'antd';
+import { Timeline, Icon, Card, Comment, Tooltip, BackTop, Tag } from 'antd';
 import { connect } from 'dva';
-import { JourneyModelState } from '@/models/blogs/journey';
+import { JourneyList } from '@/models/blogs/journey';
 import { Dispatch, AnyAction } from 'redux';
 import { ConnectProps, ConnectState } from '@/models/connect';
+import styles from './index.less';
+import moment from 'moment';
 
 interface JourneyIndexProps extends ConnectProps {
   loading: boolean;
-  journeyLists: JourneyModelState;
+  journeyList: JourneyList[];
   dispatch: Dispatch<AnyAction>;
 }
 
 const JourneyIndex: React.FunctionComponent<JourneyIndexProps> = props => {
-  const { dispatch, loading, journeyLists } = props;
+  const { dispatch, loading, journeyList } = props;
   const [reverse, setReverse] = useState<boolean>(false);
 
   useEffect(() => {
@@ -21,17 +23,17 @@ const JourneyIndex: React.FunctionComponent<JourneyIndexProps> = props => {
       type: 'journey/fetchJourneyList',
     });
   }, []);
-  console.log(props);
+
   const handleChangeReverse = () => {
-    console.log(journeyLists);
     if (!reverse) {
       setReverse(true);
     } else {
       setReverse(false);
     }
   };
+
   return (
-    <PageHeaderWrapper>
+    <PageHeaderWrapper title=" " extraContent={<Tag color="purple">既是人生, 也是旅程</Tag>}>
       <Card loading={loading}>
         {loading ? (
           <div style={{ textAlign: 'center' }}>
@@ -47,43 +49,32 @@ const JourneyIndex: React.FunctionComponent<JourneyIndexProps> = props => {
                 />
               </Tooltip>
             </div>
-            <Timeline mode="alternate" reverse={reverse}>
-              <Timeline.Item>
-                <Comment
-                  actions={[<span key="comment-nested-reply-to">Reply to</span>]}
-                  author={<a>Han Solo</a>}
-                  avatar={
-                    <Avatar
-                      src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                      alt="Han Solo"
-                    />
-                  }
-                  content={
-                    <p>
-                      {/* eslint-disable-next-line max-len */}
-                      We supply a series of design principles, practical patterns and high quality
-                      design resources (Sketch and Axure).
-                    </p>
-                  }
-                ></Comment>
-              </Timeline.Item>
-              <Timeline.Item color="green">Solve initial network problems 2015-09-01</Timeline.Item>
-              <Timeline.Item dot={<Icon type="clock-circle-o" style={{ fontSize: '16px' }} />}>
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
-                doloremque
-                {/* eslint-disable-next-line max-len */}
-                laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi
-                architecto beatae vitae dicta sunt explicabo.
-              </Timeline.Item>
-              <Timeline.Item color="red">Network problems being solved 2015-09-01</Timeline.Item>
-              <Timeline.Item>Create a services site 2015-09-01</Timeline.Item>
-              <Timeline.Item dot={<Icon type="clock-circle-o" style={{ fontSize: '16px' }} />}>
-                Technical testing 2015-09-01
-              </Timeline.Item>
+            <Timeline reverse={reverse}>
+              {journeyList.map((item, key) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <Timeline.Item key={key}>
+                  <Comment
+                    actions={[
+                      <span key="comment-nested-reply-to">
+                        {moment(item.journey_time).format('YYYY-MM-DD HH:mm:ss')}
+                      </span>,
+                    ]}
+                    author={<a>{item.journey_title}</a>}
+                    content={<p>{item.journey_desc}</p>}
+                  ></Comment>
+                </Timeline.Item>
+              ))}
             </Timeline>
           </Fragment>
         )}
       </Card>
+      <div>
+        <BackTop>
+          <div className={styles.backTop}>
+            <Icon type="arrow-up" />
+          </div>
+        </BackTop>
+      </div>
     </PageHeaderWrapper>
   );
 };

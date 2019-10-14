@@ -37,7 +37,7 @@ const JourneyModel: JourneyModelType = {
       if (callback) callback(response);
       yield put({
         type: 'queryJourneyList',
-        payload: response,
+        payload: response.data,
       });
     },
   },
@@ -46,7 +46,7 @@ const JourneyModel: JourneyModelType = {
     queryJourneyList(state, { payload }) {
       return {
         ...state,
-        journeyList: payload || {},
+        journeyList: payload.list || {},
       };
     },
   },

@@ -47,8 +47,8 @@ export default {
   primaryColor: '#1890FF',
   layout: 'topmenu',
   contentWidth: 'Fixed',
-  fixedHeader: false,
-  autoHideHeader: false,
+  fixedHeader: true,
+  autoHideHeader: true,
   fixSiderbar: false,
   colorWeak: false,
   menu: {

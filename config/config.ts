@@ -123,7 +123,7 @@ export default {
             {
               name: 'projectPracticeIndex',
               path: '/projectPracticeIndex',
-              icon: 'highlight',
+              icon: 'api',
               component: './ProjectPracticeIndex',
             },
             {
