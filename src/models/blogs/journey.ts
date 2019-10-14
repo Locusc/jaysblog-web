@@ -9,8 +9,12 @@ export interface JourneyList {
   journey_time: string;
 }
 
+export interface JourneyMessages {
+  list: JourneyList[];
+}
+
 export interface JourneyModelState {
-  journeyList?: JourneyList[];
+  journeyMessages?: JourneyMessages;
 }
 
 export interface JourneyModelType {
@@ -28,7 +32,9 @@ const JourneyModel: JourneyModelType = {
   namespace: 'journey',
 
   state: {
-    journeyList: [],
+    journeyMessages: {
+      list: [],
+    },
   },
 
   effects: {
@@ -37,7 +43,7 @@ const JourneyModel: JourneyModelType = {
       if (callback) callback(response);
       yield put({
         type: 'queryJourneyList',
-        payload: response.data,
+        payload: response,
       });
     },
   },
@@ -46,7 +52,7 @@ const JourneyModel: JourneyModelType = {
     queryJourneyList(state, { payload }) {
       return {
         ...state,
-        journeyList: payload.list || {},
+        journeyMessages: payload.data || {},
       };
     },
   },

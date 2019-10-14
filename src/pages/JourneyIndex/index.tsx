@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Timeline, Icon, Card, Comment, Tooltip, BackTop, Tag } from 'antd';
 import { connect } from 'dva';
-import { JourneyList } from '@/models/blogs/journey';
+import { JourneyMessages } from '@/models/blogs/journey';
 import { Dispatch, AnyAction } from 'redux';
 import { ConnectProps, ConnectState } from '@/models/connect';
 import moment from 'moment';
@@ -10,12 +10,12 @@ import styles from './index.less';
 
 interface JourneyIndexProps extends ConnectProps {
   loading: boolean;
-  journeyList: JourneyList[];
+  journeyMessages: JourneyMessages;
   dispatch: Dispatch<AnyAction>;
 }
 
 const JourneyIndex: React.FunctionComponent<JourneyIndexProps> = props => {
-  const { dispatch, loading, journeyList } = props;
+  const { dispatch, loading, journeyMessages } = props;
   const [reverse, setReverse] = useState<boolean>(false);
 
   useEffect(() => {
@@ -32,8 +32,10 @@ const JourneyIndex: React.FunctionComponent<JourneyIndexProps> = props => {
     }
   };
 
+  const { list } = journeyMessages;
+
   return (
-    <PageHeaderWrapper title=" " extraContent={<Tag color="purple">既是人生, 也是旅程</Tag>}>
+    <PageHeaderWrapper title=" " extra={<Tag color="purple">既是人生, 也是旅程</Tag>}>
       <Card loading={loading}>
         {loading ? (
           <div style={{ textAlign: 'center' }}>
@@ -50,7 +52,7 @@ const JourneyIndex: React.FunctionComponent<JourneyIndexProps> = props => {
               </Tooltip>
             </div>
             <Timeline reverse={reverse}>
-              {journeyList.map(item => (
+              {list.map(item => (
                 <Timeline.Item key={item.id}>
                   <Comment
                     actions={[
@@ -79,6 +81,6 @@ const JourneyIndex: React.FunctionComponent<JourneyIndexProps> = props => {
 };
 
 export default connect(({ journey, loading }: ConnectState) => ({
-  journeyList: journey.journeyList,
+  journeyMessages: journey.journeyMessages,
   loading: loading.effects['journey/fetchJourneyList'],
 }))(JourneyIndex);
