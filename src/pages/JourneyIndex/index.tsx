@@ -50,9 +50,8 @@ const JourneyIndex: React.FunctionComponent<JourneyIndexProps> = props => {
               </Tooltip>
             </div>
             <Timeline reverse={reverse}>
-              {journeyList.map((item, key) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <Timeline.Item key={key}>
+              {journeyList.map(item => (
+                <Timeline.Item key={item.id}>
                   <Comment
                     actions={[
                       <span key="comment-nested-reply-to">
