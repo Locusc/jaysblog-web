@@ -5,8 +5,8 @@ import { connect } from 'dva';
 import { JourneyList } from '@/models/blogs/journey';
 import { Dispatch, AnyAction } from 'redux';
 import { ConnectProps, ConnectState } from '@/models/connect';
-import styles from './index.less';
 import moment from 'moment';
+import styles from './index.less';
 
 interface JourneyIndexProps extends ConnectProps {
   loading: boolean;
@@ -61,7 +61,7 @@ const JourneyIndex: React.FunctionComponent<JourneyIndexProps> = props => {
                     ]}
                     author={<a>{item.journey_title}</a>}
                     content={<p>{item.journey_desc}</p>}
-                  ></Comment>
+                  />
                 </Timeline.Item>
               ))}
             </Timeline>
