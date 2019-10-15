@@ -62,4 +62,17 @@ export default {
       },
     ],
   },
+  VerificationCode: {
+    props: {
+      size: 'large',
+      prefix: <Icon type="picture" className={styles.prefixIcon} />,
+      placeholder: 'captcha',
+    },
+    rules: [
+      {
+        required: true,
+        message: 'Please enter Captcha!',
+      },
+    ],
+  },
 };

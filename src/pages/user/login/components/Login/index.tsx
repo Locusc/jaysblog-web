@@ -40,6 +40,8 @@ class Login extends Component<LoginProps, LoginState> {
 
   public static Captcha: React.FunctionComponent<LoginItemProps>;
 
+  public static VerificationCode: React.FunctionComponent<LoginItemProps>;
+
   static defaultProps = {
     className: '',
     defaultActiveKey: '',

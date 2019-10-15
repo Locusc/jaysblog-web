@@ -108,12 +108,12 @@ export default {
               path: '/',
               redirect: '/journeyIndex',
             },
-            {
-              name: 'welcome',
-              path: '/welcome',
-              icon: 'file-text',
-              component: './Welcome',
-            },
+            // {
+            //   name: 'welcome',
+            //   path: '/welcome',
+            //   icon: 'file-text',
+            //   component: './Welcome',
+            // },
             {
               name: 'blogIndex',
               path: '/blogIndex',

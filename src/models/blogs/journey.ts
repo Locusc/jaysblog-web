@@ -38,7 +38,7 @@ const JourneyModel: JourneyModelType = {
   },
 
   effects: {
-    *fetchJourneyList({ callback, payload }, { call, put }) {
+    *fetchJourneyList({ callback }, { call, put }) {
       const response = yield call(queryJourneyList);
       if (callback) callback(response);
       yield put({

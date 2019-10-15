@@ -5,10 +5,11 @@ export interface LoginParamsType {
   password: string;
   mobile: string;
   captcha: string;
+  verificationCode: string;
 }
 
-export async function fakeAccountLogin(params: LoginParamsType) {
-  return request('/api/login/account', {
+export async function accountLogin(params: LoginParamsType) {
+  return request('/server/api/auth/login', {
     method: 'POST',
     data: params,
   });
@@ -16,4 +17,8 @@ export async function fakeAccountLogin(params: LoginParamsType) {
 
 export async function getFakeCaptcha(mobile: string) {
   return request(`/api/login/captcha?mobile=${mobile}`);
+}
+
+export async function currentUserLogout() {
+  return request('/server/api/auth/logout');
 }

@@ -48,7 +48,7 @@ export default {
   'menu.editor.mind': '脑图编辑器',
   'menu.editor.koni': '拓扑编辑器',
 
-  'menu.blogIndex': 'Blog首页',
+  'menu.blogIndex': '主页',
   'menu.journeyIndex': '个人历程',
   'menu.messageBoardIndex': '留言板',
   'menu.projectPracticeIndex': '项目实践',

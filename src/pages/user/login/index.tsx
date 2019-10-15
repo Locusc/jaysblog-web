@@ -12,8 +12,9 @@ import LoginComponents from './components/Login';
 import styles from './style.less';
 import { LoginParamsType } from '@/services/login';
 import { ConnectState } from '@/models/connect';
+import { messages } from '@/utils/GlobalTools';
 
-const { Tab, UserName, Password, Mobile, Captcha, Submit } = LoginComponents;
+const { Tab, UserName, Password, Mobile, Captcha, Submit, VerificationCode } = LoginComponents;
 
 interface LoginProps {
   dispatch: Dispatch<AnyAction>;
@@ -23,6 +24,7 @@ interface LoginProps {
 interface LoginState {
   type: string;
   autoLogin: boolean;
+  imageCodeId: number;
 }
 
 @connect(({ login, loading }: ConnectState) => ({
@@ -35,6 +37,7 @@ class Login extends Component<LoginProps, LoginState> {
   state: LoginState = {
     type: 'account',
     autoLogin: true,
+    imageCodeId: new Date().getTime(),
   };
 
   changeAutoLogin = (e: CheckboxChangeEvent) => {
@@ -44,14 +47,20 @@ class Login extends Component<LoginProps, LoginState> {
   };
 
   handleSubmit = (err: unknown, values: LoginParamsType) => {
-    const { type } = this.state;
+    const { type, autoLogin, imageCodeId } = this.state;
     if (!err) {
       const { dispatch } = this.props;
       dispatch({
         type: 'login/login',
         payload: {
           ...values,
+          autoLogin,
+          imageCodeId,
           type,
+        },
+        callback: ({ code, msg }: { code: number; msg: string }) => {
+          if (code !== 200) messages('error', `${msg}`, 3, 'thunderbolt');
+          else messages('success', `${msg}`, 3, 'check');
         },
       });
     }
@@ -92,10 +101,16 @@ class Login extends Component<LoginProps, LoginState> {
     <Alert style={{ marginBottom: 24 }} message={content} type="error" showIcon />
   );
 
+  handleChangeImgCode = (imageCodeIdNew: number) => {
+    this.setState({
+      imageCodeId: imageCodeIdNew,
+    });
+  };
+
   render() {
     const { userLogin, submitting } = this.props;
     const { status, type: loginType } = userLogin;
-    const { type, autoLogin } = this.state;
+    const { type, autoLogin, imageCodeId } = this.state;
     return (
       <div className={styles.main}>
         <LoginComponents
@@ -139,6 +154,22 @@ class Login extends Component<LoginProps, LoginState> {
                 }
               }}
             />
+            <VerificationCode
+              name="verificationCode"
+              placeholder={`${formatMessage({ id: 'user-login.login.verificationCode' })}`}
+              rules={[
+                {
+                  required: true,
+                  message: formatMessage({ id: 'user-login.verificationCode.required' }),
+                },
+                {
+                  pattern: /^[A-Za-z0-9]{4}$/,
+                  message: formatMessage({ id: 'user-login.verificationCode.wrong-format' }),
+                },
+              ]}
+              imageCodeId={String(imageCodeId)}
+              handleChangeImgCode={this.handleChangeImgCode}
+            />
           </Tab>
           <Tab key="mobile" tab={formatMessage({ id: 'user-login.login.tab-login-mobile' })}>
             {status === 'error' &&
@@ -180,7 +211,13 @@ class Login extends Component<LoginProps, LoginState> {
             <Checkbox checked={autoLogin} onChange={this.changeAutoLogin}>
               <FormattedMessage id="user-login.login.remember-me" />
             </Checkbox>
-            <a style={{ float: 'right' }} href="">
+            <a
+              style={{ float: 'right' }}
+              href="#"
+              onClick={() =>
+                messages('error', '暂不提供找回密码功能,请联系管理员重置密码', 3, 'thunderbolt')
+              }
+            >
               <FormattedMessage id="user-login.login.forgot-password" />
             </a>
           </div>

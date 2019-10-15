@@ -9,6 +9,7 @@ import { ConnectProps, ConnectState } from '@/models/connect';
 import { CurrentUser } from '@/models/user';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
+import { messages } from '@/utils/GlobalTools';
 
 export interface GlobalHeaderRightProps extends ConnectProps {
   currentUser?: CurrentUser;
@@ -24,6 +25,10 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
       if (dispatch) {
         dispatch({
           type: 'login/logout',
+          callback: ({ code, msg }: { code: number; msg: string }) => {
+            if (code !== 200) messages('error', `${msg}`, 3, 'thunderbolt');
+            messages('success', `${msg}`, 3, 'check');
+          },
         });
       }
 

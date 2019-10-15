@@ -1,6 +1,5 @@
 import { Avatar, Card, Col, Divider, Icon, Input, Row, Tag } from 'antd';
 import React, { PureComponent } from 'react';
-
 import { Dispatch } from 'redux';
 import { GridContent, PageHeaderWrapper } from '@ant-design/pro-layout';
 import Link from 'umi/link';
@@ -12,6 +11,7 @@ import Articles from './components/Articles';
 import Applications from './components/Applications';
 import { CurrentUser, TagType } from './data.d';
 import styles from './Center.less';
+import PersonalProfile from '../GlobalComponents/PersonalProfile';
 
 const operationTabList = [
   {
@@ -159,76 +159,13 @@ class BlogIndex extends PureComponent<BlogIndexProps, BlogIndexState> {
         <GridContent>
           <Row gutter={24}>
             <Col lg={7} md={24}>
-              <Card bordered={false} style={{ marginBottom: 24 }} loading={dataLoading}>
-                {!dataLoading ? (
-                  <div>
-                    <div className={styles.avatarHolder}>
-                      {/* ../../public/favicon.pngstyle={{ width: '400px', height: '400px' }} */}
-                      <img alt="" src="../../assets/logo.svg" />
-                      {/* <img alt="" src={currentUser.avatar} /> */}
-                      <div className={styles.name}>{currentUser.name}</div>
-                      <div>{currentUser.signature}</div>
-                    </div>
-                    <div className={styles.detail}>
-                      <p>
-                        <i className={styles.title} />
-                        {currentUser.title}
-                      </p>
-                      <p>
-                        <i className={styles.group} />
-                        {currentUser.group}
-                      </p>
-                      <p>
-                        <i className={styles.address} />
-                        {currentUser.geographic.province.label}
-                        {currentUser.geographic.city.label}
-                      </p>
-                    </div>
-                    <Divider dashed />
-                    <div className={styles.tags}>
-                      <div className={styles.tagsTitle}>标签</div>
-                      {currentUser.tags.concat(newTags).map(item => (
-                        <Tag key={item.key}>{item.label}</Tag>
-                      ))}
-                      {inputVisible && (
-                        <Input
-                          ref={ref => this.saveInputRef(ref)}
-                          type="text"
-                          size="small"
-                          style={{ width: 78 }}
-                          value={inputValue}
-                          onChange={this.handleInputChange}
-                          onBlur={this.handleInputConfirm}
-                          onPressEnter={this.handleInputConfirm}
-                        />
-                      )}
-                      {!inputVisible && (
-                        <Tag
-                          onClick={this.showInput}
-                          style={{ background: '#fff', borderStyle: 'dashed' }}
-                        >
-                          <Icon type="plus" />
-                        </Tag>
-                      )}
-                    </div>
-                    <Divider style={{ marginTop: 16 }} dashed />
-                    <div className={styles.team}>
-                      <div className={styles.teamTitle}>团队</div>
-                      <Row gutter={36}>
-                        {currentUser.notice &&
-                          currentUser.notice.map(item => (
-                            <Col key={item.id} lg={24} xl={12}>
-                              <Link to={item.href}>
-                                <Avatar size="small" src={item.logo} />
-                                {item.member}
-                              </Link>
-                            </Col>
-                          ))}
-                      </Row>
-                    </div>
-                  </div>
-                ) : null}
-              </Card>
+              <PersonalProfile
+                newTags={newTags}
+                inputVisible={inputVisible}
+                inputValue={inputValue}
+                dataLoading={dataLoading}
+                currentUser={currentUser}
+              />
             </Col>
             <Col lg={17} md={24}>
               <Card

@@ -17,6 +17,7 @@ export interface LoginItemType {
   Password: React.FC<WrappedLoginItemProps>;
   Mobile: React.FC<WrappedLoginItemProps>;
   Captcha: React.FC<WrappedLoginItemProps>;
+  VerificationCode: React.FC<WrappedLoginItemProps>;
 }
 
 export interface LoginItemProps extends GetFieldDecoratorOptions {
@@ -36,10 +37,13 @@ export interface LoginItemProps extends GetFieldDecoratorOptions {
   customProps?: { [key: string]: unknown };
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   tabUtil?: LoginContextProps['tabUtil'];
+  imageCodeId?: string;
+  handleChangeImgCode?: (imageCodeId: number) => void | undefined;
 }
 
 interface LoginItemState {
   count: number;
+  imgCodeUrl: string;
 }
 
 const FormItem = Form.Item;
@@ -56,11 +60,15 @@ class WrapFormItem extends Component<LoginItemProps, LoginItemState> {
     super(props);
     this.state = {
       count: 0,
+      imgCodeUrl: '',
     };
   }
 
   componentDidMount() {
-    const { updateActive, name = '' } = this.props;
+    const { updateActive, imageCodeId, name = '' } = this.props;
+    this.setState({
+      imgCodeUrl: `/server/api/auth/image_code?code_id=${imageCodeId}`,
+    });
     if (updateActive) {
       updateActive(name);
     }
@@ -113,8 +121,17 @@ class WrapFormItem extends Component<LoginItemProps, LoginItemState> {
     }, 1000);
   };
 
+  handleChangeImgCode = () => {
+    const { handleChangeImgCode } = this.props;
+    const newImageCodeId = new Date().getTime();
+    this.setState({
+      imgCodeUrl: `/server/api/auth/image_code?code_id=${newImageCodeId}`,
+    });
+    if (handleChangeImgCode) handleChangeImgCode(newImageCodeId);
+  };
+
   render() {
-    const { count } = this.state;
+    const { count, imgCodeUrl } = this.state;
 
     // 这么写是为了防止restProps中 带入 onChange, defaultValue, rules props tabUtil
     const {
@@ -129,6 +146,8 @@ class WrapFormItem extends Component<LoginItemProps, LoginItemState> {
       type,
       form,
       tabUtil,
+      imageCodeId,
+      handleChangeImgCode,
       ...restProps
     } = this.props;
     if (!name) {
@@ -141,7 +160,6 @@ class WrapFormItem extends Component<LoginItemProps, LoginItemState> {
     // get getFieldDecorator props
     const options = this.getFormItemOptions(this.props);
     const otherProps = restProps || {};
-
     if (type === 'Captcha') {
       const inputProps = omit(otherProps, ['onGetCaptcha', 'countDown']);
 
@@ -160,6 +178,27 @@ class WrapFormItem extends Component<LoginItemProps, LoginItemState> {
               >
                 {count ? `${count} ${getCaptchaSecondText}` : getCaptchaButtonText}
               </Button>
+            </Col>
+          </Row>
+        </FormItem>
+      );
+    }
+    if (type === 'VerificationCode') {
+      const inputProps = omit(otherProps, ['onGetCaptcha', 'countDown']);
+
+      return (
+        <FormItem>
+          <Row gutter={8}>
+            <Col span={16}>
+              {getFieldDecorator(name, options)(<Input {...customProps} {...inputProps} />)}
+            </Col>
+            <Col span={8}>
+              <img
+                className={styles.getCaptcha}
+                alt="图形验证码"
+                src={imgCodeUrl}
+                onClick={this.handleChangeImgCode}
+              />
             </Col>
           </Row>
         </FormItem>
