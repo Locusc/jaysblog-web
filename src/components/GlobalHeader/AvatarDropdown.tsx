@@ -2,13 +2,16 @@ import { Avatar, Icon, Menu } from 'antd';
 import { ClickParam } from 'antd/es/menu';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import React from 'react';
+import { connect } from 'dva';
 import router from 'umi/router';
-import { ConnectProps } from '@/models/connect';
+import { CurrentUser } from '@/models/user';
+import { ConnectProps, ConnectState } from '@/models/connect';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
 import { messages } from '@/utils/GlobalTools';
 
 export interface GlobalHeaderRightProps extends ConnectProps {
+  currentUser?: CurrentUser;
   menu?: boolean;
 }
 
@@ -34,8 +37,8 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
   };
 
   render(): React.ReactNode {
-    const { menu } = this.props;
-    const userMessages = JSON.parse(sessionStorage.getItem('userMessages') || '');
+    const { currentUser = { avatar_url: '', nick_name: '' }, menu } = this.props;
+
     const menuHeaderDropdown = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={this.onMenuClick}>
         {menu && (
@@ -59,11 +62,16 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
       </Menu>
     );
 
-    return !userMessages && !userMessages.nick_name ? (
+    return currentUser && currentUser.nick_name ? (
       <HeaderDropdown overlay={menuHeaderDropdown}>
         <span className={`${styles.action} ${styles.account}`}>
-          <Avatar size="small" className={styles.avatar} src={userMessages.avatar} alt="avatar" />
-          <span className={styles.name}>{userMessages.nick_name}</span>
+          <Avatar
+            size="small"
+            className={styles.avatar}
+            src={currentUser.avatar_url}
+            alt="avatar"
+          />
+          <span className={styles.name}>{currentUser.nick_name}</span>
         </span>
       </HeaderDropdown>
     ) : (
@@ -72,4 +80,6 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
     );
   }
 }
-export default AvatarDropdown;
+export default connect(({ user }: ConnectState) => ({
+  currentUser: user.currentUser,
+}))(AvatarDropdown);

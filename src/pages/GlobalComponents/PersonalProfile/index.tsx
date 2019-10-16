@@ -1,19 +1,29 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card, Divider, Tag, Input, Row, Col, Avatar, Icon } from 'antd';
 import { Link } from 'umi';
 import styles from './index.less';
-import { CurrentUser, TagType } from '../../BlogIndex/data.d';
+import { connect } from 'dva';
+import { ConnectState } from '@/models/connect';
+import { Dispatch, AnyAction } from 'redux';
+import { CurrentUser } from '@/models/user';
 
 export interface PersonalProfileState {
   dataLoading: boolean;
   currentUser: CurrentUser;
-  newTags: TagType[];
+  // newTags: TagType[];
   inputVisible: boolean;
   inputValue: string;
+  dispatch: Dispatch<AnyAction>;
 }
 
 const PersonalProfile: React.FunctionComponent<PersonalProfileState> = props => {
-  const { dataLoading, currentUser, newTags, inputVisible, inputValue } = props;
+  const { dataLoading, currentUser, dispatch } = props;
+
+  useEffect(() => {
+    dispatch({
+      type: 'fetch/fetchCurrent',
+    });
+  }, []);
 
   console.log(currentUser);
   return (
@@ -21,27 +31,27 @@ const PersonalProfile: React.FunctionComponent<PersonalProfileState> = props => 
       {!dataLoading ? (
         <div>
           <div className={styles.avatarHolder}>
-            <img alt="" src={currentUser.avatar} />
-            <div className={styles.name}>{currentUser.name}</div>
-            <div>{currentUser.signature}</div>
+            <img alt="" src={currentUser.avatar_url} />
+            <div className={styles.name}>{currentUser.nick_name}</div>
+            <div>舔狗不得House</div>
           </div>
           <div className={styles.detail}>
             <p>
               <i className={styles.title} />
-              {currentUser.title}
+              {'一只咸鱼'}
             </p>
             <p>
               <i className={styles.group} />
-              {currentUser.group}
+              {'开发组'}
             </p>
             <p>
               <i className={styles.address} />
-              {currentUser.geographic.province.label}
-              {currentUser.geographic.city.label}
+              {'四川'}
+              {'成都'}
             </p>
           </div>
           <Divider dashed />
-          <div className={styles.tags}>
+          {/* <div className={styles.tags}>
             <div className={styles.tagsTitle}>标签</div>
             {currentUser.tags.concat(newTags).map(item => (
               <Tag key={item.key}>{item.label}</Tag>
@@ -81,11 +91,14 @@ const PersonalProfile: React.FunctionComponent<PersonalProfileState> = props => 
                   </Col>
                 ))}
             </Row>
-          </div>
+          </div> */}
         </div>
       ) : null}
     </Card>
   );
 };
 
-export default PersonalProfile;
+export default connect(({ user, loading }: ConnectState) => ({
+  currentUser: user.currentUser,
+  dataLoading: loading.effects['fetch/fetchCurrent'],
+}))(PersonalProfile);

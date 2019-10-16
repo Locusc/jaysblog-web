@@ -42,7 +42,6 @@ const Model: LoginModelType = {
       });
       // Login successfully
       if (response.code === 200) {
-        sessionStorage.setItem('userMessages', JSON.stringify(response.user));
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };

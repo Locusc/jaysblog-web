@@ -7,6 +7,7 @@ import { Dispatch, AnyAction } from 'redux';
 import { ConnectProps, ConnectState } from '@/models/connect';
 import moment from 'moment';
 import styles from './index.less';
+import PersonalProfile from '../GlobalComponents/PersonalProfile';
 
 interface JourneyIndexProps extends ConnectProps {
   loading: boolean;
@@ -39,13 +40,7 @@ const JourneyIndex: React.FunctionComponent<JourneyIndexProps> = props => {
       <GridContent>
         <Row gutter={24}>
           <Col lg={7} md={24}>
-            {/* <PersonalProfile
-                newTags={newTags}
-                inputVisible={inputVisible}
-                inputValue={inputValue}
-                dataLoading={dataLoading}
-                currentUser={currentUser}
-              /> */}
+            <PersonalProfile />
           </Col>
           <Col lg={17} md={24}>
             <Card loading={loading} className={styles.tabsCard}>

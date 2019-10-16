@@ -1,9 +1,9 @@
 import { Effect } from 'dva';
 import { Reducer } from 'redux';
 
-import { queryCurrent, query as queryUsers } from '@/services/user';
+import { queryCurrent, query as queryUsers, queryUserMessages } from '@/services/user';
 
-export interface CurrentUser {
+export interface ICurrentUser {
   avatar?: string;
   name?: string;
   title?: string;
@@ -17,13 +17,14 @@ export interface CurrentUser {
   unreadCount?: number;
 }
 
-export interface IUser {
+export interface CurrentUser {
   id?: number;
-  nick_name: string;
+  nick_name?: string;
   email?: string;
   desc?: string;
   avatar_url?: string;
   gender?: string;
+  unreadCount?: number;
 }
 
 export interface UserModelState {
@@ -58,8 +59,9 @@ const UserModel: UserModelType = {
         payload: response,
       });
     },
-    *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
+    *fetchCurrent({ callback }, { call, put }) {
+      const response = yield call(queryUserMessages);
+      if (callback) callback(response);
       yield put({
         type: 'saveCurrentUser',
         payload: response,
@@ -71,7 +73,7 @@ const UserModel: UserModelType = {
     saveCurrentUser(state, action) {
       return {
         ...state,
-        currentUser: action.payload || {},
+        currentUser: action.payload.data || {},
       };
     },
     changeNotifyCount(
