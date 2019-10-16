@@ -5,7 +5,7 @@ import { GlobalModelState } from './global';
 import { DefaultSettings as SettingModelState } from '../../config/defaultSettings';
 import { UserModelState } from './user';
 import { LoginModelType } from './login';
-import { JourneyModelType, JourneyModelState } from './blogs/journey';
+import { JourneyModelState } from './blogs/journey';
 
 export { GlobalModelState, SettingModelState, UserModelState };
 
