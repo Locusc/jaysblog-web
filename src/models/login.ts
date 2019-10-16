@@ -2,7 +2,6 @@ import { Reducer } from 'redux';
 import { routerRedux } from 'dva/router';
 import { Effect } from 'dva';
 import { stringify } from 'querystring';
-
 import { accountLogin, getFakeCaptcha, currentUserLogout } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
@@ -43,6 +42,7 @@ const Model: LoginModelType = {
       });
       // Login successfully
       if (response.code === 200) {
+        sessionStorage.setItem('userMessages', JSON.stringify(response.user));
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };
@@ -68,7 +68,6 @@ const Model: LoginModelType = {
     *logout({ callback }, { put, call }) {
       const response = yield call(currentUserLogout);
       if (callback) callback(response);
-      sessionStorage.clear();
       const { redirect } = getPageQuery();
       // redirect
       if (window.location.pathname !== '/user/login' && !redirect) {
@@ -86,6 +85,8 @@ const Model: LoginModelType = {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
+      // const target = {"currentAuthority":"admin","type":"account"}
+      // Object.assign(payload,target)
       setAuthority(payload.currentAuthority);
       return {
         ...state,

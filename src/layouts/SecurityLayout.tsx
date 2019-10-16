@@ -1,21 +1,13 @@
 import React from 'react';
-import { connect } from 'dva';
 import { Redirect } from 'umi';
 import { stringify } from 'querystring';
-import { ConnectState, ConnectProps } from '@/models/connect';
-import { CurrentUser } from '@/models/user';
 import PageLoading from '@/components/PageLoading';
-
-interface SecurityLayoutProps extends ConnectProps {
-  loading: boolean;
-  currentUser: CurrentUser;
-}
 
 interface SecurityLayoutState {
   isReady: boolean;
 }
 
-class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayoutState> {
+class SecurityLayout extends React.Component<SecurityLayoutState> {
   state: SecurityLayoutState = {
     isReady: false,
   };
@@ -24,25 +16,21 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
     this.setState({
       isReady: true,
     });
-    const { dispatch } = this.props;
-    if (dispatch) {
-      dispatch({
-        type: 'user/fetchCurrent',
-      });
-    }
   }
 
   render() {
     const { isReady } = this.state;
-    const { children, loading, currentUser } = this.props;
+    const { children } = this.props;
+    const userMessages = JSON.parse(sessionStorage.getItem('userMessages') || '');
     // You can replace it to your authentication rule (such as check token exists)
     // 你可以把它替换成你自己的登录认证规则（比如判断 token 是否存在）
-    const isLogin = currentUser && currentUser.userid;
+    // currentUser && currentUser.userid
+    const isLogin = userMessages && userMessages.id;
     const queryString = stringify({
       redirect: window.location.href,
     });
 
-    if ((!isLogin && loading) || !isReady) {
+    if (!isLogin || !isReady) {
       return <PageLoading />;
     }
     if (!isLogin) {
@@ -52,7 +40,4 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
   }
 }
 
-export default connect(({ user, loading }: ConnectState) => ({
-  currentUser: user.currentUser,
-  loading: loading.models.user,
-}))(SecurityLayout);
+export default SecurityLayout;

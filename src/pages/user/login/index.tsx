@@ -1,7 +1,6 @@
 import { Alert, Checkbox, Icon } from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
 import React, { Component } from 'react';
-
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { Dispatch, AnyAction } from 'redux';
 import { FormComponentProps } from 'antd/es/form';
@@ -39,6 +38,10 @@ class Login extends Component<LoginProps, LoginState> {
     autoLogin: true,
     imageCodeId: new Date().getTime(),
   };
+
+  componentDidMount() {
+    sessionStorage.clear();
+  }
 
   changeAutoLogin = (e: CheckboxChangeEvent) => {
     this.setState({

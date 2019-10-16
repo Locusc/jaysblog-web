@@ -1,7 +1,7 @@
 import { Effect } from 'dva';
 import { Reducer } from 'redux';
 
-import { queryCurrent, queryCategory, query as queryUsers } from '@/services/user';
+import { queryCurrent, query as queryUsers } from '@/services/user';
 
 export interface CurrentUser {
   avatar?: string;
@@ -17,24 +17,17 @@ export interface CurrentUser {
   unreadCount?: number;
 }
 
-export interface ListParams {
-  id: number;
-  cg_name: string;
-  cg_count: number;
-}
-
-export interface CategoryData {
-  pagination: {
-    current: number;
-    pageSize: number;
-    total: number;
-  };
-  list: ListParams[];
+export interface IUser {
+  id?: number;
+  nick_name: string;
+  email?: string;
+  desc?: string;
+  avatar_url?: string;
+  gender?: string;
 }
 
 export interface UserModelState {
   currentUser?: CurrentUser;
-  categoryData?: CategoryData;
 }
 
 export interface UserModelType {
@@ -43,12 +36,10 @@ export interface UserModelType {
   effects: {
     fetch: Effect;
     fetchCurrent: Effect;
-    fetchCategory: Effect;
   };
   reducers: {
     saveCurrentUser: Reducer<UserModelState>;
     changeNotifyCount: Reducer<UserModelState>;
-    queryCategory: Reducer<UserModelState>;
   };
 }
 
@@ -74,14 +65,6 @@ const UserModel: UserModelType = {
         payload: response,
       });
     },
-    *fetchCategory({ callback, payload }, { call, put }) {
-      const response = yield call(queryCategory, payload);
-      if (callback) callback(response);
-      yield put({
-        type: 'queryCategory',
-        payload: response,
-      });
-    },
   },
 
   reducers: {
@@ -104,12 +87,6 @@ const UserModel: UserModelType = {
           notifyCount: action.payload.totalCount,
           unreadCount: action.payload.unreadCount,
         },
-      };
-    },
-    queryCategory(state, action) {
-      return {
-        ...state,
-        categoryData: action.payload || {},
       };
     },
   },
