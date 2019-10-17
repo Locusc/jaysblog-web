@@ -31,7 +31,7 @@ const PersonalProfile: React.FunctionComponent<PersonalProfileState> = props => 
     });
   }, []);
 
-  const { list } = categoryMessages
+  const { list } = categoryMessages;
 
   return (
     <Card bordered={false} style={{ marginBottom: 24 }} loading={dataLoading}>
@@ -39,11 +39,9 @@ const PersonalProfile: React.FunctionComponent<PersonalProfileState> = props => 
         <div>
           <div className={styles.avatarHolder}>
             <img alt="" src={currentUser.avatar_url} />
-            <div className={styles.name}>{'Jay Chen'}</div>
+            <div className={styles.name}>Jay Chen</div>
             <div>
-              <Tag color='#000000'>
-                舔狗不得House
-              </Tag>
+              <Tag color="#000000">舔狗不得House</Tag>
             </div>
           </div>
           <div className={styles.detail}>
@@ -72,13 +70,16 @@ const PersonalProfile: React.FunctionComponent<PersonalProfileState> = props => 
           <div className={styles.team}>
             <div className={styles.teamTitle}>团队</div>
             <Row gutter={36}>
-                <Col lg={24} xl={12}>
-                  <Link to={'/'}>
-                    <Avatar size="small" src={'https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png'} />
-                    {'Cetron'}
-                  </Link>
-                </Col>
-            </Row> 
+              <Col lg={24} xl={12}>
+                <Link to="/">
+                  <Avatar
+                    size="small"
+                    src="https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png"
+                  />
+                  {'Cetron'}
+                </Link>
+              </Col>
+            </Row>
           </div>
         </div>
       ) : null}

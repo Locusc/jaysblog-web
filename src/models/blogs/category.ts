@@ -1,6 +1,6 @@
-import { Effect } from 'dva'
-import { Reducer } from 'redux'
-import { queryCategories } from '@/services/blogs/category'
+import { Effect } from 'dva';
+import { Reducer } from 'redux';
+import { queryCategories } from '@/services/blogs/category';
 
 export interface CategoryModelState {
   list: {
@@ -9,50 +9,50 @@ export interface CategoryModelState {
     cg_posts_count: number;
   }[];
   pagination: {
-      pageSize?: number;
-      current?: number;
-      total?: number;
+    pageSize?: number;
+    current?: number;
+    total?: number;
   };
 }
 
 export interface CategoryModelType {
-  namespace:'category';
+  namespace: 'category';
   state: CategoryModelState;
   effects: {
-      fetchCategoryList: Effect;
+    fetchCategoryList: Effect;
   };
   reducers: {
-      changeCategoryList: Reducer;
+    changeCategoryList: Reducer;
   };
 }
 
-const CategoryModel:CategoryModelType = {
-    namespace:'category',
+const CategoryModel: CategoryModelType = {
+  namespace: 'category',
 
-    state: {
-        list:[],
-        pagination:{},
+  state: {
+    list: [],
+    pagination: {},
+  },
+
+  effects: {
+    *fetchCategoryList({ payload, callback }, { call, put }) {
+      const response = yield call(queryCategories, payload);
+      if (callback) callback(response);
+      yield put({
+        type: 'changeCategoryList',
+        payload: response,
+      });
     },
+  },
 
-    effects: {
-        *fetchCategoryList({ payload, callback }, { call, put }){
-            const response = yield call(queryCategories, payload)
-            if (callback) callback(response)
-            yield put({
-                type: 'changeCategoryList',
-                payload: response,
-            })
-        }
+  reducers: {
+    changeCategoryList(state, { payload }) {
+      return {
+        ...state,
+        ...payload.data,
+      };
     },
+  },
+};
 
-    reducers: {
-        changeCategoryList(state, { payload }){
-            return {
-                ...state,
-                ...payload.data,
-            }
-        }
-    }
-}
-
-export default CategoryModel
+export default CategoryModel;
