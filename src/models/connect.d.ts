@@ -7,6 +7,7 @@ import { UserModelState } from './user';
 import { LoginModelType } from './login';
 import { JourneyModelState } from './blogs/journey';
 import { CategoryModelState } from './blogs/category';
+import { BlogModelState } from './blogs/blog';
 
 export { GlobalModelState, SettingModelState, UserModelState };
 
@@ -21,6 +22,7 @@ export interface Loading {
     login?: boolean;
     journey?: boolean;
     category?: boolean;
+    blog?: boolean;
   };
 }
 
@@ -32,6 +34,7 @@ export interface ConnectState {
   login: LoginModelType;
   journey: JourneyModelState;
   category: CategoryModelState;
+  blog: BlogModelState;
 }
 
 export interface Route extends MenuDataItem {
@@ -47,5 +50,6 @@ export interface ConnectProps<T = {}> extends Partial<RouterTypes<Route, T>> {
 
 export interface Pagination {
   pageSize?: number;
-  currentPage?: number;
+  current?: number;
+  total?: number;
 }

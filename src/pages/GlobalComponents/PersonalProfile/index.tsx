@@ -26,7 +26,7 @@ const PersonalProfile: React.FunctionComponent<PersonalProfileState> = props => 
       type: 'category/fetchCategoryList',
       payload: {
         pageSize: 20,
-        currentPage: 1,
+        current: 1,
       },
     });
   }, []);

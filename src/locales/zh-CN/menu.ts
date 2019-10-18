@@ -53,4 +53,5 @@ export default {
   'menu.messageBoardIndex': '留言板',
   'menu.projectPracticeIndex': '项目实践',
   'menu.summaryIndex': '总结',
+  'menu.articleDetails': '文章详情',
 };

@@ -109,7 +109,7 @@ export default {
           routes: [
             {
               path: '/',
-              redirect: '/journeyIndex',
+              redirect: '/blogIndex',
             },
             // {
             //   name: 'welcome',
@@ -122,6 +122,13 @@ export default {
               path: '/blogIndex',
               icon: 'customer-service',
               component: './BlogIndex',
+            },
+            {
+              name: 'articleDetails',
+              path: '/articleDetails/:postId',
+              icon: 'customer-service',
+              component: './BlogIndex/components/ArticleDetails',
+              hideInMenu: true,
             },
             {
               name: 'projectPracticeIndex',

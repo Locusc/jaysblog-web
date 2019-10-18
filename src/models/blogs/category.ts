@@ -8,7 +8,7 @@ export interface CategoryModelState {
     cg_name: string;
     cg_posts_count: number;
   }[];
-  pagination: {
+  paginates: {
     pageSize?: number;
     current?: number;
     total?: number;
@@ -22,7 +22,7 @@ export interface CategoryModelType {
     fetchCategoryList: Effect;
   };
   reducers: {
-    changeCategoryList: Reducer;
+    changeCategoryList: Reducer<CategoryModelState>;
   };
 }
 
@@ -31,7 +31,7 @@ const CategoryModel: CategoryModelType = {
 
   state: {
     list: [],
-    pagination: {},
+    paginates: {},
   },
 
   effects: {

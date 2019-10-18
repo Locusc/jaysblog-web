@@ -14,12 +14,14 @@ interface SecurityLayoutProps extends ConnectProps {
 interface SecurityLayoutState {
   isReady: boolean;
   isCompleted: boolean;
+  isFetchLogin: boolean;
 }
 
 class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayoutState> {
   state: SecurityLayoutState = {
     isReady: false,
     isCompleted: false,
+    isFetchLogin: true,
   };
 
   componentDidMount() {
@@ -32,13 +34,14 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
         type: 'user/fetchCurrent',
         callback: ({ code, msg }: { code: number; msg: string }) => {
           if (code === 200) this.setState({ isCompleted: true });
+          else this.setState({ isFetchLogin: false });
         },
       });
     }
   }
 
   render() {
-    const { isReady, isCompleted } = this.state;
+    const { isReady, isCompleted, isFetchLogin } = this.state;
     const { children, loading, currentUser } = this.props;
     // You can replace it to your authentication rule (such as check token exists)
     // 你可以把它替换成你自己的登录认证规则（比如判断 token 是否存在）
@@ -47,12 +50,14 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
     const queryString = stringify({
       redirect: window.location.href,
     });
-    if (isCompleted) {
-      if ((!isLogin && loading) || !isReady) {
-        return <PageLoading />;
-      }
-      if (!isLogin) {
-        return <Redirect to={`/user/login?${queryString}`}></Redirect>;
+    if (isFetchLogin) {
+      if (isCompleted) {
+        if ((!isLogin && loading) || !isReady) {
+          return <PageLoading />;
+        }
+        if (!isLogin) {
+          return <Redirect to={`/user/login?${queryString}`}></Redirect>;
+        }
       }
     }
 

@@ -1,26 +1,28 @@
-import { Avatar } from 'antd';
+import { Tag } from 'antd';
 import React from 'react';
 import moment from 'moment';
 import styles from './index.less';
 
 export interface ApplicationsProps {
   data: {
-    content?: string;
-    updatedAt?: any;
-    avatar?: string;
-    owner?: string;
-    href?: string;
+    post_title: string;
+    post_user_id: number;
+    post_digest: string;
+    post_index_image_url: string;
+    post_category: string;
+    post_create_time: string;
+    post_update_time: string;
   };
 }
 const ArticleListContent: React.FC<ApplicationsProps> = ({
-  data: { content, updatedAt, avatar, owner, href },
+  data: { post_digest, post_create_time, post_user_id },
 }) => (
   <div className={styles.listContent}>
-    <div className={styles.description}>{content}</div>
+    <div className={styles.description}>{post_digest}</div>
     <div className={styles.extra}>
-      <Avatar src={avatar} size="small" />
-      <a href={href}>{owner}</a> 发布在 <a href={href}>{href}</a>
-      <em>{moment(updatedAt).format('YYYY-MM-DD HH:mm')}</em>
+      <a>{post_user_id === 1 ? 'Jay Chen ' : 'Jay Chen '}</a>
+      <span>发布在</span>
+      <em>{moment(post_create_time).format('YYYY-MM-DD HH:mm:ss')}</em>
     </div>
   </div>
 );

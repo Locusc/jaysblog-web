@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { PageHeaderWrapper, GridContent } from '@ant-design/pro-layout';
-import { Timeline, Icon, Card, Comment, Tooltip, BackTop, Tag, Row, Col } from 'antd';
+import { Timeline, Icon, Card, Comment, Tooltip, Tag, Row, Col } from 'antd';
 import { connect } from 'dva';
 import { JourneyMessages } from '@/models/blogs/journey';
 import { Dispatch, AnyAction } from 'redux';
@@ -8,6 +8,7 @@ import { ConnectProps, ConnectState } from '@/models/connect';
 import moment from 'moment';
 import styles from './index.less';
 import PersonalProfile from '../GlobalComponents/PersonalProfile';
+import BackTopComponent from '../GlobalComponents/BackTop';
 
 interface JourneyIndexProps extends ConnectProps {
   loading: boolean;
@@ -77,11 +78,7 @@ const JourneyIndex: React.FunctionComponent<JourneyIndexProps> = props => {
               )}
             </Card>
             <div>
-              <BackTop>
-                <div className={styles.backTop}>
-                  <Icon type="arrow-up" />
-                </div>
-              </BackTop>
+              <BackTopComponent />
             </div>
           </Col>
         </Row>

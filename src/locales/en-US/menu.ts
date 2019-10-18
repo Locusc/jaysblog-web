@@ -53,4 +53,5 @@ export default {
   'menu.messageBoardIndex': 'Message Board',
   'menu.projectPracticeIndex': 'Project Practice',
   'menu.summaryIndex': 'Personal Summary',
+  'menu.articleDetails': 'Article Details',
 };
