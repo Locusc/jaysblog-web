@@ -11,7 +11,11 @@ export interface ListItemDataType {
   post_clicks?: number;
   post_like_num?: number;
   post_index_image_url?: string;
-  post_category?: string;
+  post_category: {
+    cg_name: string;
+    cg_posts_count: number;
+    id: number;
+  };
   post_comments_count?: number;
   post_create_time?: string;
   post_update_time?: string;
@@ -36,12 +40,16 @@ export interface BlogArticleDetails {
       comment_content: string;
       comment_from_admin: boolean;
       comment_post_id: number;
+      comment_create_time: string;
+      comment_update_time: string;
       comment_replies: {
         id: number;
         reply_from_user: string;
         reply_to_user: string;
         reply_content: string;
         reply_comment_id: number;
+        reply_create_time: string;
+        reply_update_time: string;
       }[];
     }[];
   };

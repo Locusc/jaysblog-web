@@ -2,7 +2,6 @@ import { Card, Col, Row } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { Dispatch } from 'redux';
 import { GridContent, PageHeaderWrapper } from '@ant-design/pro-layout';
-import Link from 'umi/link';
 import { RouteChildrenProps } from 'react-router';
 import { connect } from 'dva';
 import { ModalState } from './model';
@@ -53,6 +52,7 @@ interface BlogIndexState {
 
 const BlogIndex: React.FunctionComponent<BlogIndexProps> = props => {
   const [tabKey, setTabKey] = useState<BlogIndexState['tabKeys']>('articles');
+  const [categoryId, setCategoryId] = useState<number>()
 
   const { dispatch } = props;
 
@@ -72,15 +72,31 @@ const BlogIndex: React.FunctionComponent<BlogIndexProps> = props => {
     });
   }, []);
 
-  const handleChangeArticleList = (current: number, pageSize: number) => {
+  // 点击分类查询分类下的所有文章 在state中保存分类id 避免点击分类下文章的分页时没有分类id
+  const handleChangeArticleList = (current: number, pageSize: number, category_id? :number) => {
+    setCategoryId(category_id)
+
     dispatch({
       type: 'blog/fetchArticleList',
       payload: {
         pageSize,
         current,
+        category_id,
       },
     });
   };
+
+  // 分页查询
+  const handleChangePaginagtion = (current: number, pageSize: number) => {
+    dispatch({
+      type: 'blog/fetchArticleList',
+      payload: {
+        pageSize,
+        current,
+        category_id: categoryId || null,
+      },
+    });
+  }
 
   const onTabChange = (key: string) => {
     // If you need to sync state to url
@@ -97,7 +113,7 @@ const BlogIndex: React.FunctionComponent<BlogIndexProps> = props => {
       return <StudyPlan />;
     }
     if (tabKeys === 'articles') {
-      return <Articles handleChangeArticleList={handleChangeArticleList} />;
+      return <Articles handleChangePaginagtion={handleChangePaginagtion} />;
     }
     return null;
   };
@@ -109,7 +125,7 @@ const BlogIndex: React.FunctionComponent<BlogIndexProps> = props => {
       <GridContent>
         <Row gutter={24}>
           <Col lg={7} md={24}>
-            <PersonalProfile />
+            <PersonalProfile handleChangeArticleList={handleChangeArticleList}/>
           </Col>
           <Col lg={17} md={24}>
             <Card

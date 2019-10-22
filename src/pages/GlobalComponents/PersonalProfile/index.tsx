@@ -13,6 +13,7 @@ export interface PersonalProfileState {
   currentUser: CurrentUser;
   categoryMessages: CategoryModelState;
   dispatch: Dispatch<AnyAction>;
+  handleChangeArticleList: (page?: number, pageSize?: number, category_id?: number) => void
 }
 
 const PersonalProfile: React.FunctionComponent<PersonalProfileState> = props => {
@@ -30,6 +31,14 @@ const PersonalProfile: React.FunctionComponent<PersonalProfileState> = props => 
       },
     });
   }, []);
+
+  const handleChangeList = (value: number) => {
+    const { handleChangeArticleList } = props
+    if (handleChangeArticleList) {
+      handleChangeArticleList(1, 5, value)
+    }
+  }
+
 
   const { list } = categoryMessages;
 
@@ -63,7 +72,7 @@ const PersonalProfile: React.FunctionComponent<PersonalProfileState> = props => 
           <div className={styles.tags}>
             <div className={styles.tagsTitle}>分类</div>
             {list.map(item => (
-              <Tag key={item.id}>{item.cg_name}</Tag>
+              <Tag key={item.id} onClick={() => handleChangeList(item.id)}>{item.cg_name}</Tag>
             ))}
           </div>
           <Divider style={{ marginTop: 16 }} dashed />

@@ -2,17 +2,10 @@ import { Tag } from 'antd';
 import React from 'react';
 import moment from 'moment';
 import styles from './index.less';
+import { ListItemDataType } from '@/models/blogs/blog';
 
 export interface ApplicationsProps {
-  data: {
-    post_title: string;
-    post_user_id: number;
-    post_digest: string;
-    post_index_image_url: string;
-    post_category: string;
-    post_create_time: string;
-    post_update_time: string;
-  };
+  data: ListItemDataType
 }
 const ArticleListContent: React.FC<ApplicationsProps> = ({
   data: { post_digest, post_create_time, post_user_id },

@@ -13,16 +13,16 @@ export interface BlogModelProps {
   paginates: BlogModelState['paginates'];
   dispatch?: Dispatch<AnyAction>;
   loading: boolean;
-  handleChangeArticleList: (page?: number, pageSize?: number) => void;
+  handleChangePaginagtion: (page?: number, pageSize?: number) => void;
 }
 
 const Articles: React.FunctionComponent<Partial<BlogModelProps>> = props => {
   const { list, paginates, loading } = props;
 
   const handleChangeArticleListState = (page: number, pageSize?: number) => {
-    const { handleChangeArticleList } = props;
-    if (handleChangeArticleList) {
-      handleChangeArticleList(page, pageSize);
+    const { handleChangePaginagtion } = props;
+    if (handleChangePaginagtion) {
+      handleChangePaginagtion(page, pageSize);
     }
   };
 
