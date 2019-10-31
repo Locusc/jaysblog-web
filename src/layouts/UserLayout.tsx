@@ -50,7 +50,7 @@ const UserLayout: React.SFC<UserLayoutProps> = props => {
                 <span className={styles.title}>Jay`s Blog</span>
               </Link>
             </div>
-            <div className={styles.desc}>Jay`s Blog</div>
+            <div className={styles.desc}>点击Logo返回主页</div>
           </div>
           {children}
         </div>

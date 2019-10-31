@@ -2,7 +2,8 @@ import { Reducer } from 'redux';
 import { routerRedux } from 'dva/router';
 import { Effect } from 'dva';
 import { stringify } from 'querystring';
-import { accountLogin, getFakeCaptcha, currentUserLogout } from '@/services/login';
+import { accountLogin, currentUserLogout, handleOauthLogin } from '@/services/login';
+import { userRegister } from '@/services/user'
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 
@@ -17,8 +18,8 @@ export interface LoginModelType {
   state: StateType;
   effects: {
     login: Effect;
-    getCaptcha: Effect;
     logout: Effect;
+    oauthLogin: Effect;
   };
   reducers: {
     changeLoginStatus: Reducer<StateType>;
@@ -34,7 +35,16 @@ const Model: LoginModelType = {
 
   effects: {
     *login({ callback, payload }, { call, put }) {
-      const response = yield call(accountLogin, payload);
+      let response = null
+      if(payload.type === 'register'){
+        response = yield call(userRegister, payload);
+      }else{
+        if(payload instanceof Object){
+          response = yield call(accountLogin, payload);
+        }else{
+          response = yield call(handleOauthLogin, payload);
+        }
+      }
       if (callback) callback(response);
       yield put({
         type: 'changeLoginStatus',
@@ -61,9 +71,6 @@ const Model: LoginModelType = {
       }
     },
 
-    *getCaptcha({ payload }, { call }) {
-      yield call(getFakeCaptcha, payload);
-    },
     *logout({ callback }, { put, call }) {
       const response = yield call(currentUserLogout);
       if (callback) callback(response);
@@ -80,12 +87,16 @@ const Model: LoginModelType = {
         );
       }
     },
+    *oauthLogin({ callback, payload }, { call }){
+      const response = yield call(handleOauthLogin, payload)
+      if (callback) callback(response)
+    },
   },
 
   reducers: {
     changeLoginStatus(state, { payload }) {
-      // const target = {"currentAuthority":"admin","type":"account"}
-      // Object.assign(payload,target)
+      const target = {"currentAuthority":payload.is_admin?"admin":"user","type":"account"}
+      Object.assign(payload,target)
       setAuthority(payload.currentAuthority);
       return {
         ...state,

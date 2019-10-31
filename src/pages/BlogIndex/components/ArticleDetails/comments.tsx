@@ -25,6 +25,8 @@ const CommentsIndex:React.FunctionComponent<HeadingIndexProps> = props => {
                     <Avatar
                         src=""
                         alt="User"
+                        icon="user"
+                        style={{color:'#000000'}}
                     />
                 }
                 content={
@@ -52,18 +54,18 @@ const CommentsIndex:React.FunctionComponent<HeadingIndexProps> = props => {
                             avatar={
                                 <Avatar
                                     src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                                    alt="Han Solo"
+                                    alt="User"
+                                    icon="user"
+                                    style={{color:'#000000'}}
                                 />
                             }
                             datetime={
                                 <Tooltip
                                     title={moment(items.comment_create_time)
-                                    .subtract(1, 'days')
                                     .format('YYYY-MM-DD HH:mm:ss')}
                                 >
                                     <span>
                                     {moment(items.comment_create_time)
-                                        .subtract(1, 'days')
                                         .fromNow()}
                                     </span>
                                 </Tooltip>

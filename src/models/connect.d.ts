@@ -8,6 +8,7 @@ import { LoginModelType } from './login';
 import { JourneyModelState } from './blogs/journey';
 import { CategoryModelState } from './blogs/category';
 import { BlogModelState } from './blogs/blog';
+import { MessageBoardState } from './blogs/board';
 
 export { GlobalModelState, SettingModelState, UserModelState };
 
@@ -23,6 +24,7 @@ export interface Loading {
     journey?: boolean;
     category?: boolean;
     blog?: boolean;
+    board?: boolean;
   };
 }
 
@@ -35,6 +37,7 @@ export interface ConnectState {
   journey: JourneyModelState;
   category: CategoryModelState;
   blog: BlogModelState;
+  board: MessageBoardState;
 }
 
 export interface Route extends MenuDataItem {

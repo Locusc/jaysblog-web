@@ -94,6 +94,11 @@ export default {
           component: './user/login',
         },
         {
+          name: 'register',
+          path: '/user/register',
+          component: './user/UserRegister',
+        },
+        {
           component: './404',
         },
       ],
@@ -103,6 +108,12 @@ export default {
       component: '../layouts/SecurityLayout',
       routes: [
         {
+          name: 'oauthIndex',
+          path: '/oauthIndex',
+          component: './GlobalComponents/OauthCallBack',
+          hideInMenu: true,
+        },
+        {
           path: '/',
           component: '../layouts/BasicLayout',
           authority: ['admin', 'user', 'guest'],
@@ -110,8 +121,7 @@ export default {
             {
               path: '/',
               redirect: '/blogIndex',
-            },
-            // {
+            }, // {
             //   name: 'welcome',
             //   path: '/welcome',
             //   icon: 'file-text',
@@ -131,12 +141,6 @@ export default {
               hideInMenu: true,
             },
             {
-              name: 'projectPracticeIndex',
-              path: '/projectPracticeIndex',
-              icon: 'api',
-              component: './ProjectPracticeIndex',
-            },
-            {
               name: 'journeyIndex',
               path: '/journeyIndex',
               icon: 'crown',
@@ -147,6 +151,12 @@ export default {
               path: '/messageBoardIndex',
               icon: 'message',
               component: './MessageBoardIndex',
+            },
+            {
+              name: 'projectPracticeIndex',
+              path: '/projectPracticeIndex',
+              icon: 'api',
+              component: './ProjectPracticeIndex',
             },
             {
               name: 'summaryIndex',
@@ -188,7 +198,7 @@ export default {
         resourcePath: string;
       },
       _: string,
-      localName: string,
+      localName: string
     ) => {
       if (
         context.resourcePath.includes('node_modules') ||
@@ -216,7 +226,7 @@ export default {
     basePath: '/',
   },
   chainWebpack: webpackPlugin,
-
+  //target: 'http://192.168.199.181:5000/',
   proxy: {
     '/server/api/': {
       target: 'http://127.0.0.1:5000/',

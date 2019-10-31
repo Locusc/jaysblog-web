@@ -30,15 +30,15 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
           id: 'component.globalHeader.search',
         })}
         dataSource={[
-          formatMessage({
-            id: 'component.globalHeader.search.example1',
-          }),
-          formatMessage({
-            id: 'component.globalHeader.search.example2',
-          }),
-          formatMessage({
-            id: 'component.globalHeader.search.example3',
-          }),
+          // formatMessage({
+          //   id: 'component.globalHeader.search.example1',
+          // }),
+          // formatMessage({
+          //   id: 'component.globalHeader.search.example2',
+          // }),
+          // formatMessage({
+          //   id: 'component.globalHeader.search.example3',
+          // }),
         ]}
         onSearch={value => {
           console.log('input', value);

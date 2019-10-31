@@ -1,4 +1,4 @@
-import { Alert, Checkbox, Icon } from 'antd';
+import { Alert, Checkbox, Icon, Tooltip } from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
 import React, { Component } from 'react';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
@@ -12,6 +12,7 @@ import styles from './style.less';
 import { LoginParamsType } from '@/services/login';
 import { ConnectState } from '@/models/connect';
 import { messages } from '@/utils/GlobalTools';
+import oauthConfig from '@/utils/oauthConfig'
 
 const { Tab, UserName, Password, Mobile, Captcha, Submit, VerificationCode } = LoginComponents;
 
@@ -110,6 +111,13 @@ class Login extends Component<LoginProps, LoginState> {
     });
   };
 
+  handleGithubOauth = () => {
+    //保存授权前的链接
+    window.localStorage.preventHref = window.location.href
+    // window.location.href = 'https://github.com/login/oauth/authorize?client_id=***&redirect_uri=http://xxxx.cn/'
+    window.location.href = `${oauthConfig.oauth_uri}?client_id=${oauthConfig.client_id}&redirect_uri=${oauthConfig.redirect_uri}`
+  }
+
   render() {
     const { userLogin, submitting } = this.props;
     const { status, type: loginType } = userLogin;
@@ -174,7 +182,7 @@ class Login extends Component<LoginProps, LoginState> {
               handleChangeImgCode={this.handleChangeImgCode}
             />
           </Tab>
-          <Tab key="mobile" tab={formatMessage({ id: 'user-login.login.tab-login-mobile' })}>
+          <Tab disabled  key="mobile" tab={formatMessage({ id: 'user-login.login.tab-login-mobile' })}>
             {status === 'error' &&
               loginType === 'mobile' &&
               !submitting &&
@@ -229,7 +237,9 @@ class Login extends Component<LoginProps, LoginState> {
           </Submit>
           <div className={styles.other}>
             <FormattedMessage id="user-login.login.sign-in-with" />
-            <Icon type="github" className={styles.icon} theme="outlined" />
+            <Tooltip title={'GitHub授权登陆'} placement={'bottomLeft'}>
+              <Icon type="github" className={styles.icon} theme="outlined" onClick={this.handleGithubOauth}/>
+            </Tooltip>
             <Link className={styles.register} to="/user/register">
               <FormattedMessage id="user-login.login.signup" />
             </Link>

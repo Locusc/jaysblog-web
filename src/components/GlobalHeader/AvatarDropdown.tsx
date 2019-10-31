@@ -1,4 +1,4 @@
-import { Avatar, Icon, Menu } from 'antd';
+import { Avatar, Icon, Menu, Tag, Tooltip, Spin } from 'antd';
 import { ClickParam } from 'antd/es/menu';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import React from 'react';
@@ -9,10 +9,12 @@ import { ConnectProps, ConnectState } from '@/models/connect';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
 import { messages } from '@/utils/GlobalTools';
+import { Link } from 'umi';
 
 export interface GlobalHeaderRightProps extends ConnectProps {
   currentUser?: CurrentUser;
   menu?: boolean;
+  currentUserLoading?: boolean;
 }
 
 class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
@@ -37,7 +39,7 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
   };
 
   render(): React.ReactNode {
-    const { currentUser = { avatar_url: '', nick_name: '' }, menu } = this.props;
+    const { currentUser = { avatar_url: '', nick_name: '' }, menu, currentUserLoading } = this.props;
 
     const menuHeaderDropdown = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={this.onMenuClick}>
@@ -62,24 +64,40 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
       </Menu>
     );
 
-    return currentUser && currentUser.nick_name ? (
-      <HeaderDropdown overlay={menuHeaderDropdown}>
-        <span className={`${styles.action} ${styles.account}`}>
-          <Avatar
-            size="small"
-            className={styles.avatar}
-            src={currentUser.avatar_url}
-            alt="avatar"
-          />
-          <span className={styles.name}>{currentUser.nick_name}</span>
+    return !currentUserLoading? (
+      currentUser && currentUser.nick_name ?  (
+        <HeaderDropdown overlay={menuHeaderDropdown}>
+          <span className={`${styles.action} ${styles.account}`}>
+            <Avatar
+              size="small"
+              className={styles.avatar}
+              src={currentUser.avatar_url}
+              alt="avatar"
+              icon="user"
+            />
+            <span className={styles.name}>{currentUser.nick_name}</span>
+          </span>
+        </HeaderDropdown>
+      ) : (
+        <span>
+          <Tooltip placement="bottomLeft" title={'支持Github授权登陆'}>
+            <Link to={'user/login'}>
+              <Tag style={{cursor:"pointer"}} color={'#108ee9'}>登陆</Tag>
+            </Link>
+          </Tooltip>
+          <Link to={'user/register'}>
+            <Tag style={{cursor:"pointer"}}>注册</Tag>
+          </Link>
         </span>
-      </HeaderDropdown>
+      )
     ) : (
-      <span>神秘人</span>
-      // <Spin size="small" style={{ marginLeft: 8, marginRight: 8 }} />
-    );
+      <span>
+        <Spin size="small" style={{ marginLeft: 8, marginRight: 8 }} />
+      </span>
+    )
   }
 }
-export default connect(({ user }: ConnectState) => ({
+export default connect(({ user, loading }: ConnectState) => ({
   currentUser: user.currentUser,
+  currentUserLoading: loading.models.user
 }))(AvatarDropdown);

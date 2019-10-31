@@ -1,17 +1,20 @@
 import request from '@/utils/request';
 
-export async function query(): Promise<any> {
-  return request('/api/users');
-}
-
-export async function queryCurrent(): Promise<any> {
-  return request('/api/currentUser');
-}
-
-export async function queryNotices(): Promise<any> {
-  return request('/api/notices');
+export interface UserRegisterParams {
+  email: string;
+  password: string;
+  confirm: string;
+  username: string;
+  type: string;
 }
 
 export async function queryUserMessages(): Promise<any> {
   return request('/server/api/auth/getUserMessages');
+}
+
+export async function userRegister(registerData: UserRegisterParams): Promise<any> {
+  return request('/server/api/auth/register',{
+    method: 'POST',
+    data: registerData,
+  })
 }

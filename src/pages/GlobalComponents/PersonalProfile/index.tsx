@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Card, Divider, Tag, Row, Col, Avatar } from 'antd';
+import { Card, Divider, Tag, Row, Col, Avatar, Icon } from 'antd';
 import { Link } from 'umi';
 import styles from './index.less';
 import { connect } from 'dva';
@@ -7,6 +7,7 @@ import { ConnectState } from '@/models/connect';
 import { Dispatch, AnyAction } from 'redux';
 import { CurrentUser } from '@/models/user';
 import { CategoryModelState } from '@/models/blogs/category';
+import Router from 'umi/router';
 
 export interface PersonalProfileState {
   dataLoading: boolean;
@@ -36,6 +37,8 @@ const PersonalProfile: React.FunctionComponent<PersonalProfileState> = props => 
     const { handleChangeArticleList } = props
     if (handleChangeArticleList) {
       handleChangeArticleList(1, 5, value)
+    } else {
+      Router.push({pathname:'/blogIndex', query:{ cateId:value }})
     }
   }
 
@@ -47,10 +50,10 @@ const PersonalProfile: React.FunctionComponent<PersonalProfileState> = props => 
       {!dataLoading ? (
         <div>
           <div className={styles.avatarHolder}>
-            <img alt="" src={currentUser.avatar_url} />
+            <img alt="" src={require('../../../../src/assets/images/jay.jpg')} />
             <div className={styles.name}>Jay Chen</div>
             <div>
-              <Tag color="#000000">舔狗不得House</Tag>
+              <Tag color="#000000">娱乐型憨憨前端</Tag>
             </div>
           </div>
           <div className={styles.detail}>
@@ -60,7 +63,7 @@ const PersonalProfile: React.FunctionComponent<PersonalProfileState> = props => 
             </p>
             <p>
               <i className={styles.group} />
-              {'Software Development Team'}
+              {`WeChat：Ayu019Bryant`}
             </p>
             <p>
               <i className={styles.address} />
@@ -72,7 +75,7 @@ const PersonalProfile: React.FunctionComponent<PersonalProfileState> = props => 
           <div className={styles.tags}>
             <div className={styles.tagsTitle}>分类</div>
             {list.map(item => (
-              <Tag key={item.id} onClick={() => handleChangeList(item.id)}>{item.cg_name}</Tag>
+              <Tag style={{cursor:"pointer"}} key={item.id} onClick={() => handleChangeList(item.id)}>{item.cg_name}</Tag>
             ))}
           </div>
           <Divider style={{ marginTop: 16 }} dashed />

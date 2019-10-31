@@ -15,10 +15,10 @@ export async function accountLogin(params: LoginParamsType) {
   });
 }
 
-export async function getFakeCaptcha(mobile: string) {
-  return request(`/api/login/captcha?mobile=${mobile}`);
-}
-
 export async function currentUserLogout() {
   return request('/server/api/auth/logout');
+}
+
+export async function handleOauthLogin(code: string){
+  return request(`/server/api/oauth/login/${code}`);
 }

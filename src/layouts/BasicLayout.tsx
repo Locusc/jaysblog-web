@@ -8,6 +8,7 @@ import ProLayout, {
   MenuDataItem,
   BasicLayoutProps as ProLayoutProps,
   Settings,
+  DefaultFooter,
 } from '@ant-design/pro-layout';
 import React, { useEffect } from 'react';
 import Link from 'umi/link';
@@ -19,6 +20,7 @@ import RightContent from '@/components/GlobalHeader/RightContent';
 import { ConnectState } from '@/models/connect';
 import { isAntDesignPro } from '@/utils/utils';
 import logo from '../assets/logo.svg';
+import { Icon } from 'antd';
 
 export interface BasicLayoutProps extends ProLayoutProps {
   breadcrumbNameMap: {
@@ -45,13 +47,39 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
     return Authorized.check(item.authority, localItem, null) as MenuDataItem;
   });
 
-const footerRender: BasicLayoutProps['footerRender'] = (_, defaultDom) => {
+  const defaultFooterDom = (
+    <DefaultFooter
+      copyright="Jay Chen who knows a little about front-end development"
+      links={[
+        {
+          key: 'Zhi Hu',
+          title: 'Zhi Hu',
+          href: '#',
+          blankTarget: true,
+        },
+        {
+          key: 'github',
+          title: <Icon type="github" />,
+          href: 'https://github.com/Locusc',
+          blankTarget: true,
+        },
+        {
+          key: 'Nuggets',
+          title: 'Nuggets',
+          href: '#',
+          blankTarget: true,
+        },
+      ]}
+    />
+  );
+
+const footerRender: BasicLayoutProps['footerRender'] = () => {
   if (!isAntDesignPro()) {
-    return defaultDom;
+    return defaultFooterDom ;
   }
   return (
     <>
-      {defaultDom}
+      {defaultFooterDom }
       <div
         style={{
           padding: '0px 24px 24px',

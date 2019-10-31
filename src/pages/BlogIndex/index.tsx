@@ -4,14 +4,13 @@ import { Dispatch } from 'redux';
 import { GridContent, PageHeaderWrapper } from '@ant-design/pro-layout';
 import { RouteChildrenProps } from 'react-router';
 import { connect } from 'dva';
-import { ModalState } from './model';
-import Projects from './components/Projects';
 import Articles from './components/Articles';
 import StudyPlan from './components/StudyPlan';
-import { CurrentUser } from './data.d';
 import styles from './Center.less';
 import PersonalProfile from '../GlobalComponents/PersonalProfile';
 import BackTopComponent from '../GlobalComponents/BackTop';
+import { ConnectState } from '@/models/connect';
+import { CurrentUser } from '@/models/user';
 
 const operationTabList = () => [
   {
@@ -22,14 +21,14 @@ const operationTabList = () => [
       </span>
     ),
   },
-  {
-    key: 'projects',
-    tab: (
-      <span>
-        项目 <span style={{ fontSize: 14 }}></span>
-      </span>
-    ),
-  },
+  // {
+  //   key: 'projects',
+  //   tab: (
+  //     <span>
+  //       项目 <span style={{ fontSize: 14 }}></span>
+  //     </span>
+  //   ),
+  // },
   {
     key: 'applications',
     tab: (
@@ -54,11 +53,13 @@ const BlogIndex: React.FunctionComponent<BlogIndexProps> = props => {
   const [tabKey, setTabKey] = useState<BlogIndexState['tabKeys']>('articles');
   const [categoryId, setCategoryId] = useState<number>()
 
-  const { dispatch } = props;
+  const { dispatch, location } = props;
+
+  const cateId = location.search !== ''? Number(location.search.split('=')[1]) : null
 
   useEffect(() => {
     dispatch({
-      type: 'blogIndex/fetchCurrent',
+      type: 'user/fetchCurrent',
     });
     dispatch({
       type: 'blogIndex/fetch',
@@ -68,6 +69,7 @@ const BlogIndex: React.FunctionComponent<BlogIndexProps> = props => {
       payload: {
         pageSize: 5,
         current: 1,
+        category_id: cateId? cateId: null,
       },
     });
   }, []);
@@ -75,7 +77,6 @@ const BlogIndex: React.FunctionComponent<BlogIndexProps> = props => {
   // 点击分类查询分类下的所有文章 在state中保存分类id 避免点击分类下文章的分页时没有分类id
   const handleChangeArticleList = (current: number, pageSize: number, category_id? :number) => {
     setCategoryId(category_id)
-
     dispatch({
       type: 'blog/fetchArticleList',
       payload: {
@@ -93,7 +94,7 @@ const BlogIndex: React.FunctionComponent<BlogIndexProps> = props => {
       payload: {
         pageSize,
         current,
-        category_id: categoryId || null,
+        category_id: categoryId? categoryId : (cateId? cateId: null),
       },
     });
   }
@@ -106,9 +107,9 @@ const BlogIndex: React.FunctionComponent<BlogIndexProps> = props => {
   };
 
   const renderChildrenByTabKey = (tabKeys: BlogIndexState['tabKeys']) => {
-    if (tabKeys === 'projects') {
-      return <Projects />;
-    }
+    // if (tabKeys === 'projects') {
+    //   return <Projects />;
+    // }
     if (tabKeys === 'applications') {
       return <StudyPlan />;
     }
@@ -145,15 +146,7 @@ const BlogIndex: React.FunctionComponent<BlogIndexProps> = props => {
   );
 };
 
-export default connect(
-  ({
-    loading,
-    blogIndex,
-  }: {
-    loading: { effects: { [key: string]: boolean } };
-    blogIndex: ModalState;
-  }) => ({
-    currentUser: blogIndex.currentUser,
-    currentUserLoading: loading.effects['blogIndex/fetchCurrent'],
-  }),
-)(BlogIndex);
+export default connect(({ user, loading }: ConnectState) => ({
+  currentUser: user.currentUser,
+  currentUserLoading: loading.models.user,
+}))(BlogIndex);
