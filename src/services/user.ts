@@ -9,11 +9,11 @@ export interface UserRegisterParams {
 }
 
 export async function queryUserMessages(): Promise<any> {
-  return request('/server/api/auth/getUserMessages');
+  return request('/api/auth/getUserMessages');
 }
 
 export async function userRegister(registerData: UserRegisterParams): Promise<any> {
-  return request('/server/api/auth/register',{
+  return request('/api/auth/register',{
     method: 'POST',
     data: registerData,
   })

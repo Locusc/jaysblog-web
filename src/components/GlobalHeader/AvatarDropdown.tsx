@@ -81,11 +81,11 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
       ) : (
         <span>
           <Tooltip placement="bottomLeft" title={'支持Github授权登陆'}>
-            <Link to={'user/login'}>
+            <Link to={'/user/login'}>
               <Tag style={{cursor:"pointer"}} color={'#108ee9'}>登陆</Tag>
             </Link>
           </Tooltip>
-          <Link to={'user/register'}>
+          <Link to={'/user/register'}>
             <Tag style={{cursor:"pointer"}}>注册</Tag>
           </Link>
         </span>

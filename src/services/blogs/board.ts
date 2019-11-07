@@ -8,14 +8,14 @@ export interface IAddBoardMessage {
 }
 
 export async function queryMessageBoardList(pagination: Pagination){
-  return request('/server/api/board/list', {
+  return request('/api/board/list', {
     method: 'POST',
     data: pagination,
   });
 }
 
 export async function addMessageBoardInfo(params: IAddBoardMessage){
-  return request('/server/api/board/addBoardMessage', {
+  return request('/api/board/addBoardMessage', {
     method: 'POST',
     data: params,
   });

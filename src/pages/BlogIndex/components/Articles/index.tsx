@@ -61,7 +61,7 @@ const Articles: React.FunctionComponent<Partial<BlogModelProps>> = props => {
         <List.Item
           key={item.id}
           actions={[
-            <IconText key="star" type="star-o" text={item.post_clicks} />,
+            <IconText key="star" type="eye" text={item.post_clicks} />,
             <IconText key="like" type="like-o" text={item.post_like_num} />,
             <IconText key="message" type="message" text={item.post_comments_count} />,
           ]}

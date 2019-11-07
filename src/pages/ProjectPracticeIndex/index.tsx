@@ -73,8 +73,8 @@ const covers = [
   // 'https://gw.alipayobjects.com/zos/rmsportal/gLaIAoVWTtLbBWZNYEMg.png',
 ];
 const desc = [
-  '基于Python3.7+Flask1.0+Sqlalchemy1.3+Mysql8+Redis5实现的博客后台',
-  '基于React16.9+Redux4+Dva2.4+Umi2.8+Antdesgin3.20实现博客前端',
+  '基于Python3.7+Flask1.0+Sqlalchemy1.3+Mysql8+Redis5+Migrate2实现的博客后台',
+  '基于React16.9+ReactHook+Redux4+Dva2.4+Umi2.8+Antdesgin3.20实现博客前端',
   // '生命就像一盒巧克力，结果往往出人意料',
   // '城镇中有那么多的酒馆，她却偏偏走进了我的酒馆',
   // '那时候我只会想自己想要什么，从不想自己拥有什么',
@@ -150,6 +150,15 @@ const list:ListItemDataType[] = fakeList(2)
 
 const Projects: React.FunctionComponent<Partial<ModalState>> = props => {
   // const { list } = props;
+
+  const handleOpenUrl = (id: string) => {
+    if(id === 'fake-list-0'){
+      window.open("https://github.com/Locusc/jaysblog", "_blank");
+    }else{
+      window.open("https://github.com/Locusc/jaysblog-web", "_blank");
+    }
+  }
+
   return (
     <PageHeaderWrapper>
       <GridContent>
@@ -166,7 +175,7 @@ const Projects: React.FunctionComponent<Partial<ModalState>> = props => {
                   hoverable
                   cover={<img alt={item.title}
                   src={item.cover} />}
-                  onClick={() => messages('success', '博主正在整理中...', 3, 'loading')}
+                  onClick={() => handleOpenUrl(item.id)}
                 >
                   <Card.Meta title={<a>{item.title}</a>} description={item.subDescription} />
                     <div className={styles.cardItemContent}>

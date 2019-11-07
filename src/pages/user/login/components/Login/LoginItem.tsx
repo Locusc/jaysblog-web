@@ -67,7 +67,7 @@ class WrapFormItem extends Component<LoginItemProps, LoginItemState> {
   componentDidMount() {
     const { updateActive, imageCodeId, name = '' } = this.props;
     this.setState({
-      imgCodeUrl: `/server/api/auth/image_code?code_id=${imageCodeId}`,
+      imgCodeUrl: `/api/auth/image_code?code_id=${imageCodeId}`,
     });
     if (updateActive) {
       updateActive(name);
@@ -125,7 +125,7 @@ class WrapFormItem extends Component<LoginItemProps, LoginItemState> {
     const { handleChangeImgCode } = this.props;
     const newImageCodeId = new Date().getTime();
     this.setState({
-      imgCodeUrl: `/server/api/auth/image_code?code_id=${newImageCodeId}`,
+      imgCodeUrl: `/api/auth/image_code?code_id=${newImageCodeId}`,
     });
     if (handleChangeImgCode) handleChangeImgCode(newImageCodeId);
   };

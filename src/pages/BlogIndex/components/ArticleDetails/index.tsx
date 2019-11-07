@@ -3,13 +3,16 @@ import { connect } from 'dva';
 import { GridContent, PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Dispatch, AnyAction } from 'redux';
 import { ConnectState } from '@/models/connect';
-import { Card, Row, Col, Divider, Icon, Button } from 'antd';
+import { Card, Row, Col } from 'antd';
 import { BlogArticleDetails } from '@/models/blogs/blog';
 import AnchorIndex from '@/pages/GlobalComponents/Anchor';
 import HeadingIndex from './heading';
 import DescriptionsIndex from './descriptions';
 import BackTopComponent from '@/pages/GlobalComponents/BackTop';
 import CommentsIndex from './comments';
+import LikeNums from './components/LikeNums';
+import Marked from 'marked';
+import Highlight from 'highlight.js';
 
 
 export interface ArticleDetailsProps {
@@ -33,6 +36,8 @@ const ArticleDetails: React.FunctionComponent<ArticleDetailsProps> = props => {
     loading,
   } = props;
 
+
+
   const [size, setSize] = useState({
     width: document.documentElement.clientWidth,
     height: document.documentElement.clientHeight,
@@ -50,11 +55,26 @@ const ArticleDetails: React.FunctionComponent<ArticleDetailsProps> = props => {
       type: 'blog/fetchArticleDetails',
       payload: postId,
     });
+    Marked.setOptions({
+      renderer: new Marked.Renderer(),
+      gfm: true,
+      tables: true,
+      breaks: true,
+      pedantic: false,
+      sanitize: true,
+      smartLists: true,
+      smartypants: false,
+      highlight: (code) => {
+          return Highlight.highlightAuto(code).value;
+      },
+    });
     window.addEventListener('resize', onResize);
     return (() => {
       window.removeEventListener('resize', onResize);
     })
   }, []);
+
+
 
   return (
     articleMessages && !loading ?
@@ -72,11 +92,16 @@ const ArticleDetails: React.FunctionComponent<ArticleDetailsProps> = props => {
                   <Col lg={17} md={24}>
                     <div>
                       <h1 style={{ textAlign: 'center' }}>{articleMessages.post.post_title}</h1>
-                      <p>{articleMessages.post.post_content}</p>
+                      {articleMessages.post.post_content?
+                        <p dangerouslySetInnerHTML={{__html: articleMessages.post.post_content }} ></p> : null
+                      }
                     </div>
-                    <p style={{ textAlign: 'center', marginBottom: 50 }}><Button type="primary" icon="like" >点赞</Button></p>
+                    <LikeNums
+                      articleMessages={articleMessages}
+                    />
                     <CommentsIndex
                       articleMessages={articleMessages}
+                      dispatch={dispatch}
                     />
                   </Col>
                   {size.width <= 974 ? null :
@@ -93,7 +118,7 @@ const ArticleDetails: React.FunctionComponent<ArticleDetailsProps> = props => {
   );
 };
 
-export default connect(({ blog, loading }: ConnectState) => ({
+export default connect(({ blog, loading, user }: ConnectState) => ({
   articleMessages: blog.articleDetails,
   loading: loading.effects['blog/fetchArticleDetails'],
 }))(ArticleDetails);

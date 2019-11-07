@@ -1,6 +1,13 @@
 import { Effect } from 'dva';
 import { Reducer } from 'redux';
-import { queryArticleList, queryArticleDetails } from '@/services/blogs/blog';
+import {
+  queryArticleList,
+  queryArticleDetails,
+  queryArticleComments,
+  handleSubmitComment,
+  handleSubmitReply,
+  handleSubmitLike,
+} from '@/services/blogs/blog';
 import { Pagination } from '@/models/connect';
 
 export interface ListItemDataType {
@@ -28,10 +35,10 @@ export interface BlogModelState {
   list?: ListItemDataType[];
   loading?: boolean;
   articleDetails?: BlogArticleDetails;
+  articleComments?: BlogCommentsState;
 }
 
-export interface BlogArticleDetails {
-  post: ListItemDataType;
+export interface BlogCommentsState {
   comments: {
     paginates: Pagination;
     list: {
@@ -42,6 +49,7 @@ export interface BlogArticleDetails {
       comment_post_id: number;
       comment_create_time: string;
       comment_update_time: string;
+      comment_user_avatar_url: string,
       comment_replies: {
         id: number;
         reply_from_user: string;
@@ -50,9 +58,15 @@ export interface BlogArticleDetails {
         reply_comment_id: number;
         reply_create_time: string;
         reply_update_time: string;
+        reply_user_is_admin: boolean;
+        reply_user_avatar_url: string;
       }[];
     }[];
   };
+}
+
+export interface BlogArticleDetails {
+  post: ListItemDataType;
 }
 
 export interface BlogModelType {
@@ -61,10 +75,15 @@ export interface BlogModelType {
   effects: {
     fetchArticleList: Effect;
     fetchArticleDetails: Effect;
+    fetchArticleComments: Effect;
+    fetchSubmitComments: Effect;
+    fetchSubmitReply: Effect;
+    fetchSubmitLike: Effect;
   };
   reducers: {
     changeArticleList: Reducer<BlogModelState>;
     changeArticleDetails: Reducer<BlogModelState>;
+    changeArticlComments: Reducer<BlogModelState>;
   };
 }
 
@@ -90,6 +109,26 @@ const BlogModel: BlogModelType = {
         payload: response,
       });
     },
+    *fetchArticleComments({ payload, callback }, { call, put }){
+      const response = yield call(queryArticleComments, payload);
+      if (callback) callback(response);
+      yield put({
+        type: 'changeArticlComments',
+        payload: response,
+      });
+    },
+    *fetchSubmitComments({ payload, callback }, { call }){
+      const response = yield call(handleSubmitComment, payload);
+      if (callback) callback(response);
+    },
+    *fetchSubmitReply({ payload, callback }, { call }){
+      const response = yield call(handleSubmitReply, payload);
+      if (callback) callback(response);
+    },
+    *fetchSubmitLike({ payload, callback }, { call }){
+      const response = yield call(handleSubmitLike, payload);
+      if (callback) callback(response);
+    },
   },
 
   reducers: {
@@ -105,6 +144,12 @@ const BlogModel: BlogModelType = {
         articleDetails: payload.data,
       };
     },
+    changeArticlComments(state, { payload }){
+      return {
+        ...state,
+        articleComments: payload.data,
+      };
+    }
   },
 };
 

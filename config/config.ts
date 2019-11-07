@@ -165,6 +165,13 @@ export default {
               component: './SummaryIndex',
             },
             {
+              name: 'markDownIndex',
+              path: '/markDownIndex',
+              icon: 'audio',
+              component: './MarkDownIndex',
+              hideInMenu: true,
+            },
+            {
               component: './404',
             },
           ],
@@ -227,13 +234,13 @@ export default {
   },
   chainWebpack: webpackPlugin,
   //target: 'http://192.168.199.181:5000/',
-  proxy: {
-    '/server/api/': {
-      target: 'http://127.0.0.1:5000/',
-      changeOrigin: true,
-      pathRewrite: {
-        '^/server': '',
-      },
-    },
-  },
+  // proxy: {
+  //   '/server/api/': {
+  //     target: 'http://127.0.0.1:5000/',
+  //     changeOrigin: true,
+  //     pathRewrite: {
+  //       '^/server': '',
+  //     },
+  //   },
+  // },
 } as IConfig;

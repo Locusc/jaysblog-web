@@ -53,7 +53,7 @@ const PersonalProfile: React.FunctionComponent<PersonalProfileState> = props => 
             <img alt="" src={require('../../../../src/assets/images/jay.jpg')} />
             <div className={styles.name}>Jay Chen</div>
             <div>
-              <Tag color="#000000">娱乐型憨憨前端</Tag>
+              <Tag color="#000000">WeChat：Ayu019Bryant</Tag>
             </div>
           </div>
           <div className={styles.detail}>
@@ -63,7 +63,7 @@ const PersonalProfile: React.FunctionComponent<PersonalProfileState> = props => 
             </p>
             <p>
               <i className={styles.group} />
-              {`WeChat：Ayu019Bryant`}
+              {`Software Development Team`}
             </p>
             <p>
               <i className={styles.address} />
@@ -88,7 +88,7 @@ const PersonalProfile: React.FunctionComponent<PersonalProfileState> = props => 
                     size="small"
                     src="https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png"
                   />
-                  {'Cetron'}
+                  {'React'}
                 </Link>
               </Col>
             </Row>

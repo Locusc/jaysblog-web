@@ -10,7 +10,7 @@ import BackTopComponent from '../GlobalComponents/BackTop';
 import { CurrentUser } from '@/models/user';
 import AddMessageBoard from './modal'
 import { findDOMNode } from 'react-dom';
-import moment from 'moment';
+import moment, { now } from 'moment';
 import { messages } from '@/utils/GlobalTools';
 import { IAddBoardMessage } from '@/services/blogs/board';
 
@@ -25,6 +25,7 @@ const MessageBoard: React.FunctionComponent<MessageBoardProps> = (props) => {
   const [reverse, setReverse] = useState<boolean>(false)
   const [visible, setVisible] = useState<boolean>(false)
   const [submitting, setSubmitting] = useState<boolean>(false)
+  const [cacheTime, setCacheTime] = useState()
 
   const { dispatch, boardMessages, loading } = props
 
@@ -48,6 +49,11 @@ const MessageBoard: React.FunctionComponent<MessageBoardProps> = (props) => {
   }
 
   const handleSubmitFrom = (fieldsValue: IAddBoardMessage) => {
+    const date = new Date()
+    const nowDate = date.getTime()
+    if(nowDate - cacheTime < 30000){
+      return messages('error', '留言的速度太快了, 等下再来吧', 3, 'thunderbolt')
+    }
     setSubmitting(true)
     dispatch({
       type:'board/fetchAddMessageBoardInfo',
@@ -58,6 +64,7 @@ const MessageBoard: React.FunctionComponent<MessageBoardProps> = (props) => {
         if (code === 200){
           messages('success', `${msg}`, 3, 'check')
           handleVisibleModal(false)
+          setCacheTime(nowDate)
           dispatch({ type:'board/fetchMessageBoardList', payload: {} })
         }else {
           messages('error', `${msg}`, 3, 'thunderbolt')
@@ -134,6 +141,7 @@ const MessageBoard: React.FunctionComponent<MessageBoardProps> = (props) => {
                     <List
                       dataSource={boardMessages.list}
                       itemLayout="horizontal"
+                      loading={loading}
                       renderItem={item => (
                         <List.Item key={item.id} >
                           <List.Item.Meta

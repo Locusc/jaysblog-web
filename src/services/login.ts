@@ -9,16 +9,16 @@ export interface LoginParamsType {
 }
 
 export async function accountLogin(params: LoginParamsType) {
-  return request('/server/api/auth/login', {
+  return request('/api/auth/login', {
     method: 'POST',
     data: params,
   });
 }
 
 export async function currentUserLogout() {
-  return request('/server/api/auth/logout');
+  return request('/api/auth/logout');
 }
 
 export async function handleOauthLogin(code: string){
-  return request(`/server/api/oauth/login/${code}`);
+  return request(`/api/oauth/login/${code}`);
 }
